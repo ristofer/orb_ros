@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(orb_slam_ros)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -march=native ")
-LIST(APPEND CMAKE_MODULE_PATH /home/nao/ORB_SLAM2/cmake_modules)
+LIST(APPEND CMAKE_MODULE_PATH /home/robotica/alt_orb/ORB_SLAM2/cmake_modules)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -39,8 +39,8 @@ include_directories(
 
 include_directories(
 include
-/home/nao/ORB_SLAM2/include
-/home/nao/ORB_SLAM2
+/home/robotica/alt_orb/ORB_SLAM2/include
+/home/robotica/alt_orb/ORB_SLAM2
 ${EIGEN3_LIBS}
 ${EIGEN_LIBS}
 ${EIGEN_INCLUDE_DIRS}
@@ -50,11 +50,11 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 set(LIBS 
 ${OpenCV_LIBS} 
 ${EIGEN3_LIBS}
-/home/nao/ORB_SLAM2
-/home/nao/ORB_SLAM2/include
-/home/nao/ORB_SLAM2/Thirdparty/DBoW2/lib/libDBoW2.so
-/home/nao/ORB_SLAM2/Thirdparty/g2o/lib/libg2o.so
-/home/nao/ORB_SLAM2/lib/libORB_SLAM2.so
+/home/robotica/alt_orb/ORB_SLAM2
+/home/robotica/alt_orb/ORB_SLAM2/include
+/home/robotica/alt_orb/ORB_SLAM2/Thirdparty/DBoW2/lib/libDBoW2.so
+/home/robotica/alt_orb/ORB_SLAM2/Thirdparty/g2o/lib/libg2o.so
+/home/robotica/alt_orb/ORB_SLAM2/lib/libORB_SLAM2.so
 )
 
 
