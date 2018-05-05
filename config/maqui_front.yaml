@@ -92,4 +92,4 @@ Topic.OdomFrame: "/odom"
 Topic.TF: "tf"
 Topic.BaseFrame: "/base_link"
 
-Map.mapfile: basement.bin
+Map.mapfile: file.xml
