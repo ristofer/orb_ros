@@ -39,9 +39,9 @@ include_directories(
 
 include_directories(
 include
-/home/nao/ORB_SLAM2/include
-/home/nao/ORB_SLAM2
-/home/nao/eigen
+/home/robotica/alt_orb/ORB_SLAM2/include
+/home/robotica/alt_orb/ORB_SLAM2
+/home/robotica/eigen
 #${EIGEN3_LIBS}
 #${EIGEN_LIBS}
 #${EIGEN_INCLUDE_DIRS}
@@ -52,12 +52,12 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR} )
 set(LIBS 
 ${OpenCV_LIBS} 
 #${EIGEN3_LIBS}
-/home/nao/ORB_SLAM2
-/home/nao/ORB_SLAM2/include
-/home/nao/ORB_SLAM2/Thirdparty/DBoW2/lib/libDBoW2.so
-/home/nao/ORB_SLAM2/Thirdparty/g2o/lib/libg2o.so
-/home/nao/ORB_SLAM2/lib/libORB_SLAM2.so
-/home/nao/eigen
+/home/robotica/alt_orb/ORB_SLAM2
+/home/robotica/alt_orb/ORB_SLAM2/include
+/home/robotica/alt_orb/ORB_SLAM2/Thirdparty/DBoW2/lib/libDBoW2.so
+/home/robotica/alt_orb/ORB_SLAM2/Thirdparty/g2o/lib/libg2o.so
+/home/robotica/alt_orb/ORB_SLAM2/lib/libORB_SLAM2.so
+/home/robotica/eigen
 )
 
 
