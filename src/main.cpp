@@ -5,6 +5,7 @@
 */
 
 // ROS
+#include <Eigen/StdVector>
 #include <ros/ros.h>
 
 // TF

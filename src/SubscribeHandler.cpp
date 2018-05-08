@@ -3,8 +3,9 @@
 * Author: Tim Resink
 * Email: timresink@gmail.com
 */
-
+#include <Eigen/StdVector>
 #include"SubscribeHandler.hpp"
+
 using namespace Eigen;
 
 
