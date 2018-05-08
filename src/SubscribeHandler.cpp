@@ -3,7 +3,6 @@
 * Author: Tim Resink
 * Email: timresink@gmail.com
 */
-#include <Eigen/StdVector>
 #include"SubscribeHandler.hpp"
 
 using namespace Eigen;
@@ -11,11 +10,8 @@ using namespace Eigen;
 
 
 SubscribeHandler::SubscribeHandler(const string &strVocFile,
-                                   const string &strSettingsFile, ros::NodeHandle* pNodeHandler,
-                                   tf::TransformListener* pTFlistener, tf::TransformBroadcaster* pTFbroadcaster):
+                                   const string &strSettingsFile, ros::NodeHandle* pNodeHandler):
 mpNodeHandler(pNodeHandler),
-mpTFlistener(pTFlistener),
-mpTFbroadcaster(pTFbroadcaster),
 mbReferenceWorldFrame(false)
 {
       cv::FileStorage fsSettings(strSettingsFile, cv::FileStorage::READ);
@@ -58,24 +54,9 @@ void SubscribeHandler::GrabImage(const sensor_msgs::ImageConstPtr& msg)
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
-    try
-    {
-        mpTFlistener->waitForTransform(odomFrameTopic, cameraFrameTopic, ros::Time(0), ros::Duration(0.0001));
-        mpTFlistener->lookupTransform(odomFrameTopic, cameraFrameTopic,ros::Time(0), T_o_c);
-    }
-    catch(tf::TransformException& e)
-    {
-        ROS_WARN("TF exception while grabbing camera transform \n %s", e.what());
-    }
 
-    cvT_o_c = tfToMat(T_o_c);
-    mpSLAM->SetOdomPose(cvT_o_c);
     Twc = mpSLAM->TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
 
-    if(!Twc.empty())
-    {
-        SubscribeHandler::Publish_Orientation(Twc.clone(), T_o_c);
-    }
 
     int TrackingState = mpSLAM->GetTrackingState();
     SubscribeHandler::Publish_Tracking_State(TrackingState);
@@ -90,46 +71,6 @@ void SubscribeHandler::GrabImage(const sensor_msgs::ImageConstPtr& msg)
 
 
 
-void SubscribeHandler::Publish_Orientation(cv::Mat Tcw, tf::StampedTransform T_o_c)
-{
-
-
-    Eigen::Matrix<double, 3, 3> Tcw_eig = SubscribeHandler::toMatrix3d(Tcw.clone());
-    std::vector<float> q = SubscribeHandler::toQuaternion(Tcw_eig);
-
-    // TF fill broadcast message
-    tf::Transform TForientation;
-
-    TForientation.setOrigin(tf::Vector3(Tcw.at<float>(0,3), Tcw.at<float>(1,3),Tcw.at<float>(2,3)));
-
-    tf::Quaternion quatTF;
-    quatTF.setX(q[0]);
-    quatTF.setY(q[1]);
-    quatTF.setZ(q[2]);
-    quatTF.setW(q[3]);
-    TForientation.setRotation(quatTF);
-
-    // publish geometry message
-    geometry_msgs::PoseStamped orientation_msg;
-
-    orientation_msg.header.frame_id = "CameraTop_optical_frame";
-    orientation_msg.header.stamp.sec = T_o_c.stamp_.sec;
-    orientation_msg.pose.position.x = Tcw.at<float>(0,3);
-    orientation_msg.pose.position.y = Tcw.at<float>(1,3);
-    orientation_msg.pose.position.z = Tcw.at<float>(2,3);
-    orientation_msg.pose.orientation.x = q[0];
-    orientation_msg.pose.orientation.y = q[1];
-    orientation_msg.pose.orientation.z = q[2];
-    orientation_msg.pose.orientation.w = q[3];
-
-
-
-    mpTFbroadcaster->sendTransform(tf::StampedTransform(TForientation, T_o_c.stamp_, worldFrameNameToPublish
-            , broadCastTopic));
-
-    maqui_orientation.publish(orientation_msg);
-
-}
 
 void SubscribeHandler::Publish_Tracking_State(int state)
 {
@@ -138,27 +79,7 @@ void SubscribeHandler::Publish_Tracking_State(int state)
     tracking_state.publish(StateMsg);
     return;
 }
-cv::Mat SubscribeHandler::tfToMat(const tf::StampedTransform& tfT)
-{
-    cv::Mat cvT = cv::Mat::eye(4, 4, CV_32F);
 
-    cvT.at<float>(0,3) = tfT.getOrigin().x();
-    cvT.at<float>(1,3) = tfT.getOrigin().y();
-    cvT.at<float>(2,3) = tfT.getOrigin().z();
-    cvT.at<float>(3,3) = 1.0;
-
-    cvT.at<float>(0,0) = tfT.getBasis().getColumn(0).x();
-    cvT.at<float>(1,0) = tfT.getBasis().getColumn(0).y();
-    cvT.at<float>(2,0) = tfT.getBasis().getColumn(0).z();
-    cvT.at<float>(0,1) = tfT.getBasis().getColumn(1).x();
-    cvT.at<float>(1,1) = tfT.getBasis().getColumn(1).y();
-    cvT.at<float>(2,1) = tfT.getBasis().getColumn(1).z();
-    cvT.at<float>(0,2) = tfT.getBasis().getColumn(2).x();
-    cvT.at<float>(1,2) = tfT.getBasis().getColumn(2).y();
-    cvT.at<float>(2,2) = tfT.getBasis().getColumn(2).z();
-
-    return cvT;
-}
 
 g2o::SE3Quat SubscribeHandler::toSE3Quat(const cv::Mat &cvT)
 {

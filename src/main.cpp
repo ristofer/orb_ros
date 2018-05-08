@@ -5,14 +5,9 @@
 */
 
 // ROS
-#include <Eigen/StdVector>
 #include <ros/ros.h>
 
 // TF
-#include <tf/tf.h>
-#include <tf/tfMessage.h>
-#include <tf2_ros/buffer.h>
-#include <tf2_ros/transform_listener.h>
 
 // Eigen
 #include <Eigen/Geometry>
@@ -36,9 +31,7 @@ int main(int argc, char * argv[]){
     ros::NodeHandle NodeHandler;
 
     // buffer for the transform messages
-    tf::TransformListener TfListener;
-    tf::TransformBroadcaster TfBroadcaster;
-    SubscribeHandler maquiHandler(argv[1], argv[2], &NodeHandler, &TfListener, &TfBroadcaster);
+    SubscribeHandler maquiHandler(argv[1], argv[2], &NodeHandler);
 
     if(argc != 3)
     {

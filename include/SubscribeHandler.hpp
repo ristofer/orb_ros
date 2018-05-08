@@ -23,9 +23,9 @@ TODOs:
 #include <std_msgs/Int8.h>
 
 // TF
-#include <tf/tfMessage.h>
-#include <tf/transform_listener.h>
-#include <tf/transform_broadcaster.h>
+//#include <tf/tfMessage.h>
+//#include <tf/transform_listener.h>
+//#include <tf/transform_broadcaster.h>
 
 // cv bridge
 #include <opencv2/core/core.hpp>
@@ -42,13 +42,12 @@ class SubscribeHandler{
 public:
 	// constructors
     SubscribeHandler(const string &strVocFile,
-                     const string &strSettingsFile, ros::NodeHandle *pNodeHandler,
-                     tf::TransformListener *pTFlistener, tf::TransformBroadcaster *pTFbroadcaster);
+                     const string &strSettingsFile, ros::NodeHandle *pNodeHandler);
 
     // transform world and camera with grabbed image
-    tf::StampedTransform T_o_c;
+    //tf::StampedTransform T_o_c;
     // transform between base and camera with image
-    tf::StampedTransform T_b_c;
+    //tf::StampedTransform T_b_c;
     cv::Mat cvT_o_c;
     cv_bridge::CvImageConstPtr cv_ptr;
     cv::Mat Twc;
@@ -59,10 +58,10 @@ public:
 private:
     // methods
     void GrabImage(const sensor_msgs::ImageConstPtr &msg);
-    void Publish_Orientation(cv::Mat Tcw, tf::StampedTransform T_w_c);
+   // void Publish_Orientation(cv::Mat Tcw, tf::StampedTransform T_w_c);
     void Publish_Tracking_State(int state);
 
-    cv::Mat tfToMat(const tf::StampedTransform& tfT);
+   // cv::Mat tfToMat(const tf::StampedTransform& tfT);
     Eigen::Matrix<double,3,3> toMatrix3d(const cv::Mat &cvMat3);
     std::vector<float> toQuaternion(const Eigen::Matrix<double, 3, 3> &M);
     std::vector<float> Normalize(std::vector<float> vect);
@@ -75,8 +74,8 @@ private:
     ros::Publisher tracking_state;
     ros::Publisher current_frame;
     ros::NodeHandle* mpNodeHandler;
-    tf::TransformListener* mpTFlistener;
-    tf::TransformBroadcaster* mpTFbroadcaster;
+   // tf::TransformListener* mpTFlistener;
+   // tf::TransformBroadcaster* mpTFbroadcaster;
 
     // ORB SLAM pointer
     ORB_SLAM2::System* mpSLAM;

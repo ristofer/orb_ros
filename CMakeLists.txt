@@ -10,7 +10,6 @@ LIST(APPEND CMAKE_MODULE_PATH /home/nao/ORB_SLAM2/cmake_modules)
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   roscpp
-  tf
   std_msgs
   image_transport
   cv_bridge
